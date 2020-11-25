@@ -2,11 +2,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3"
+      version = "~> 3.0"
     }
   }
 }
 provider "aws" {
-  profile = "souunit"
+  profile = "awseducate"
   region  = "us-east-1"
 }
