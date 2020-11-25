@@ -1,0 +1,4 @@
+.terraform/
+plan0
+terraform.tfstate
+terraform.tfstate.backup
