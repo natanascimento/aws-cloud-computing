@@ -18,11 +18,11 @@ resource "aws_internet_gateway" "gw" {
 }
 
 #Definindo a subnet para as máquinas Kubernet
-resource "aws_subnet" "k8s" {
+resource "aws_subnet" "sistema-recomendacao" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "k8s"
+    Name = "sistema-recomendacao"
   }
 }
