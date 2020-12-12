@@ -24,33 +24,17 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 #Definindo security group
-resource "aws_security_group" "k8s-master" {
-  name        = "k8s-master"
-  description = "Trafego entre os k8s-master"
+resource "aws_security_group" "allow_backend" {
+  name        = "allow_backend"
+  description = "Allow backend inbound traffic"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Kubernetes API server"
-    from_port   = 6443
-    to_port     = 6443
+    description = "backend from VPC"
+    from_port   = 5000
+    to_port     = 5000
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.k8s.cidr_block]
-  }
-  
-  ingress {
-    description = "etcd server client API"
-    from_port   = 2379
-    to_port     = 2380
-    protocol    = "tcp"
-    cidr_blocks = [aws_subnet.k8s.cidr_block]
-  }
-
-  ingress {
-    description = "Kubelet API - schedule - manager"
-    from_port   = 10250
-    to_port     = 10252
-    protocol    = "tcp"
-    cidr_blocks = [aws_subnet.k8s.cidr_block]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -61,31 +45,24 @@ resource "aws_security_group" "k8s-master" {
   }
 
   tags = {
-    Name = "k8s-master"
+    Name = "allow_backend"
   }
 }
 #Definindo security group
-resource "aws_security_group" "k8s-worker" {
-  name        = "k8s-worker"
-  description = "Trafego entre os k8s-worker"
+resource "aws_security_group" "allow_frontend" {
+  name        = "allow_frontend"
+  description = "Allow frontend inbound traffic"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "Kubelet API"
-    from_port   = 10250
-    to_port     = 10250
+    description = "frontend from VPC"
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = [aws_subnet.k8s.cidr_block]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-ingress {
-    description = "NodePort Services"
-    from_port   = 30000
-    to_port     = 32767
-    protocol    = "tcp"
-    cidr_blocks = [aws_subnet.k8s.cidr_block]
-  }
- egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -93,6 +70,6 @@ ingress {
   }
 
   tags = {
-    Name = "k8s-worker"
+    Name = "allow_frontend"
   }
 }
